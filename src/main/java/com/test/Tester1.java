@@ -1,15 +1,14 @@
 package com.test;
 
-import javafx.collections.ObservableList;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Action;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
+import java.util.List;cd 
 
 /**
  * Created by pcjoshi on 1/7/15.
@@ -27,19 +26,19 @@ public class Tester1 {
 
     static Observable<List<String>> query(String text){
         String url = "https://api.github.com/users?since=";
-
-        List<String> names = new ArrayList<>();
-        if (text.equalsIgnoreCase("name")) {
-            names.add("prakash");
-            names.add("mohit");
-            names.add("suraj");
-        }else if (text.equalsIgnoreCase("sirname")) {
-            names.add("joshi");
-            names.add("baskota");
-            names.add("nepal");
+        List<String> answers = new ArrayList<>();
+        try {
+            String users = HttpConnect.httpGet(url + 5);
+            JSONArray objectArray = new JSONArray(users);
+            for (int i = 0; i < objectArray.length(); i++) {
+                JSONObject row = objectArray.getJSONObject(i);
+                answers.add(row.getString(text));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        Observable<List<String>> observable = Observable.just(names);
-        return  observable;
+        Observable<List<String>> observable = Observable.just(answers);
+        return observable;
     };
 
 
@@ -103,14 +102,20 @@ public class Tester1 {
 */
 
 
-        query("sirname").flatMap(new Func1<List<String>, Observable<?>>() {
+        query("repos_url").flatMap(new Func1<List<String>, Observable<?>>() {
             @Override
             public Observable<String> call(List<String> Names) {
-                return Observable.from(Names);
+                return Observable.from(Names).map(s -> {
+                    int lastIndex = s.lastIndexOf("/");
+                    int secondLast = s.lastIndexOf("users/")+6;
+                    String name = s.substring(secondLast,lastIndex);
+                    return name;
+                });
             }
         }).subscribe(s -> System.out.println(s));
+        System.out.println("Hey it's me async brother");
 
-        query("sirname").flatMap(list -> Observable.from(list)).subscribe(s-> System.out.println(s));
+//        query("sirname").flatMap(list -> Observable.from(list)).subscribe(s -> System.out.println(s));
 
         }
 
