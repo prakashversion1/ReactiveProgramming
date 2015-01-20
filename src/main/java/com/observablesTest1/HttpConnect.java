@@ -1,4 +1,4 @@
-package com.test;
+package com.observablesTest1;
 
 import java.io.*;
 import java.net.HttpURLConnection;

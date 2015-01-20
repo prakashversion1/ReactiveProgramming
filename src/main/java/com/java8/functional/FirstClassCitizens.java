@@ -1,4 +1,4 @@
-package com.betterTest;
+package com.java8.functional;
 
 import java.util.function.BiFunction;
 

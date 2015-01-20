@@ -1,4 +1,4 @@
-package com.betterTest;
+package com.java8.functional;
 
 /**
  * Created by prakash on 1/17/15.
