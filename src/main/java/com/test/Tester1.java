@@ -8,7 +8,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 
 import java.util.ArrayList;
-import java.util.List;cd 
+import java.util.List;
 
 /**
  * Created by pcjoshi on 1/7/15.
